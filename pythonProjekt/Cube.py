@@ -3,16 +3,17 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from Cords import Cords
+from Door import Door
 class Cube:
     colors = (155, 143, 129)
 
     surfaces = (
         (0, 1, 2, 3),
-        (0, 1, 5, 4),
-        (0, 4, 7, 3),
-        (4, 5, 6, 7),
-        (3, 2, 6, 7),
-        (1, 5, 6, 2)
+        (0, 1, 5, 4), # prawa strona domu
+        (0, 4, 7, 3), # nieistotna
+        (4, 5, 6, 7), # gora
+        (3, 2, 6, 7), # lewa strona domu
+        (1, 5, 6, 2) # przod domu
     )
 
     edges = (
@@ -44,7 +45,19 @@ class Cube:
         self.offsetx=offsetx
         self.offsety=offsety
         self.offsetz=offsetz
-        self.colors=color
+        self.colors=self.setColor(color)
+
+    def setColor(self, mode):
+        if mode == 0:
+            return (1, 0.8, 0.75)
+        if mode == 1:
+            return (0, 1, 0)
+        if mode == 2:
+            return (1, 0.91, 0.75)
+        if mode == 3:
+            return (1, 0, 0)
+        if mode == 4:
+            return (1, 1, 0)
 
     def verticlesHause(self):
         
@@ -71,10 +84,18 @@ class Cube:
         glEnd()
 
         glBegin(GL_QUADS)
+        k = 0
         for surface in self.surfaces:
-            for i, vertex in enumerate(surface):
+            k+=1
+            if k == 7:
+                glColor3fv((0.5, 0.35, 0.05))
+            else:
                 glColor3fv(self.colors)
+            
+            for i, vertex in enumerate(surface):
                 glVertex3fv(verticles[vertex])
+        
+        
         glEnd()
         return 
     

@@ -6,6 +6,7 @@ from OpenGL.GLU import *
 from Cube import Cube
 from Roof import Roof
 from Hause import Hause
+from Door import Door
 
 def light():
     glLight(GL_LIGHT0, GL_POSITION,  (5, 5, 5, 0)) # źródło światła left, top, front
@@ -48,13 +49,15 @@ def main():
     distanceDeep=-10
     distanceWidth = 2
    
-    cube1 = Cube(1,distanceWidth,0,distanceDeep, (1, 0.91, 0.75))
-    cube2 = Cube(1,-distanceWidth,0,distanceDeep, (1, 0.91, 0.75))
-    cubeMini = Cube(0.1, side, -0.5, 1, (0, 1, 0))
+    cube1 = Cube(1,distanceWidth,0,distanceDeep, 0)
     roof1 = Roof(distanceWidth,0,distanceDeep)
+    hause1 = Hause(cube1, roof1, Door(0.2,distanceWidth,0,distanceDeep-1, 0))
+    cube2 = Cube(1,-distanceWidth,0,distanceDeep, 2)
     roof2 = Roof(-distanceWidth,0,distanceDeep)
-    hause1 = Hause(cube1, roof1)
-    hause2 = Hause(cube2, roof2)
+    hause2 = Hause(cube2, roof2, Door(1/5,-distanceWidth,0,distanceDeep-10, 0))
+   
+    cubeMini = Cube(0.1, side, -0.5, 1, 1)
+    
     objList = []
     objList.append(hause1)
     objList.append(hause2)
