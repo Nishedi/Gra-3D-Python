@@ -19,12 +19,16 @@ class Hause:
         self.windowList.append(Window(distanceWidth,0,distanceDeep-1, -0.65, 1, 0.3,0))
         
 
-    def move(self, deep, incrementer):
-        self.cube.moveDeep(deep, incrementer)
+    def move(self, deep):
+        self.cube.moveDeep(deep)
         self.roof.moveDeep(deep)
         self.door.moveDeep(deep)
         for window in self.windowList:
             window.moveDeep(deep)
+    
+    def crashWindow(self):
+        self.windowList.clear()
+
 
     def showHouse(self):
         self.door.show_cube()

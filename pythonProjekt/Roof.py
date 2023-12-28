@@ -62,3 +62,6 @@ class Roof:
 
     def moveDeep(self, deep):
         self.offsetz=deep 
+
+    def moveWidth(self, width):
+        self.offsetx=width

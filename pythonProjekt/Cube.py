@@ -3,7 +3,6 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from Cords import Cords
-from Door import Door
 class Cube:
     colors = (155, 143, 129)
 
@@ -103,9 +102,9 @@ class Cube:
         verticles =self.verticlesHause()
         return (verticles[1][2], verticles[2][0], verticles[0][0])
 
-    def moveDeep(self, deep, incrementer):
-        #self.offsetz=deep  
-        self.offsetz+=incrementer
+    def moveDeep(self, deep):
+        self.offsetz=deep  
+        
 
     def moveWidth(self, width):
         self.offsetx=width

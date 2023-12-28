@@ -4,9 +4,11 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from Cube import Cube
-from Roof import Roof
 from Hause import Hause
-from Door import Door
+import random
+
+def generateRandomPossition(lowerBound, upperBound):
+    return random.randint(lowerBound, upperBound)
 
 def light():
     glLight(GL_LIGHT0, GL_POSITION,  (5, 5, 5, 0)) # źródło światła left, top, front
@@ -29,7 +31,7 @@ def chechCollision(list, cubeMini):
         
 
 def main():
-    
+    points = 0
     pygame.init()
     display = (800,600)
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
@@ -47,19 +49,17 @@ def main():
     side = 0
     distanceDeep = -45
     #distanceDeep=-10
-    distanceWidth = 2
-    incrementer = 0.1
+    #distanceWidth = 2
+    distanceWidth = generateRandomPossition(0,5)
+    incrementer = 0.001
    
-
-    hause1 = Hause(distanceWidth,distanceDeep)
-    hause2 = Hause(-distanceWidth,distanceDeep)
 
    
     cubeMini = Cube(0.1, side, -0.5, 1, 1)
     
     objList = []
-    objList.append(hause1)
-    objList.append(hause2)
+    objList.append(Hause(distanceWidth,distanceDeep))
+    objList.append(Hause(-distanceWidth,distanceDeep))
     timetowait = 10
     glRotatef(15, 3, 0, 0)
     while True:
@@ -70,9 +70,9 @@ def main():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
-                    side += 0.1
+                    side += 0.5
                 if event.key == pygame.K_LEFT:
-                    side -= 0.1
+                    side -= 0.5
                 if event.key == pygame.K_DOWN:
                     distanceDeep-=1
                 if event.key == pygame.K_UP:
@@ -99,20 +99,29 @@ def main():
         cubeMini.show_cube()
         
         for hause in objList:
-            hause.move(distanceDeep, incrementer)
+            hause.move(distanceDeep)
             hause.showHouse()
         
         light()
         collision = chechCollision(objList, cubeMini)
         if collision == False:
             distanceDeep += incrementer
-            incrementer += 0.01
+            incrementer += 0.001
 
         if distanceDeep >= 6:
             distanceDeep = -45
+            points+=10*(6-distanceWidth)
+            print(points)
+            distanceWidth = generateRandomPossition(0,5)
+            
+            print(distanceWidth)
             for hause in objList:
-                hause.cube.offsetz = -45
+                hause.crashWindow()
+            objList.clear()
+            objList.append(Hause(distanceWidth,distanceDeep))
+            objList.append(Hause(-distanceWidth,distanceDeep))
         pygame.display.flip()
         pygame.time.wait(timetowait)
 
 main()
+points+=10*(6-distanceWidth)
