@@ -3,7 +3,7 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from Cords import Cords
-class Door:
+class Window:
     colors = (155, 143, 129)
 
     surface = (1, 5, 6, 2) # przod domu)
@@ -25,39 +25,37 @@ class Door:
     offsetx=0
     offsety=0
     offsetz=0
+    movementx = 0
+    movementy = 0
 
-    def __init__(self, size, offsetx, offsety, offsetz, color):
-        self.size=size
+    def __init__(self, offsetx, offsety, offsetz, movementx, movementy, widthleft, widthright):
+        self.size=0.2
         self.offsetx=offsetx
         self.offsety=offsety
         self.offsetz=offsetz
-        self.colors=self.setColor(color)
+        self.movementx = movementx
+        self.movementy = movementy
+        self.widthleft=widthleft
+        self.widthright=widthright
 
-    def setColor(self, mode):
-        if mode == 0:
-            return (1, 0.8, 0.75)
-        if mode == 1:
-            return (0, 1, 0)
-        if mode == 2:
-            return (1, 0.91, 0.75)
-        if mode == 3:
-            return (1, 0, 0)
-        if mode == 4:
-            return (1, 1, 0)
+   
 
     def verticlesHause(self):
         off = 0.81
-        doorHeight = 0.35
         self.offsety = -0.45
-        vertices = ((self.size+self.offsetx,  -self.size+self.offsety-doorHeight,    -self.size+self.offsetz+off),
-            (self.size+self.offsetx,  -self.size+self.offsety-doorHeight,    self.size+self.offsetz+off),
-            (-self.size+self.offsetx, -self.size+self.offsety-doorHeight,    self.size+self.offsetz+off),
-            (-self.size+self.offsetx, -self.size+self.offsety-doorHeight,    -self.size+self.offsetz+off),
+        widthleft = self.widthleft
+        widthright = self.widthright
+        movement = self.movementx
+        movement2 = self.movementy
+        vertices = ((self.size+self.offsetx+movement+widthleft,  -self.size+self.offsety+movement2,    -self.size+self.offsetz+off),
+            (self.size+self.offsetx+movement+widthleft,  -self.size+self.offsety+movement2,    self.size+self.offsetz+off),
+            (-self.size+self.offsetx+movement+widthright, -self.size+self.offsety+movement2,    self.size+self.offsetz+off),
+            (-self.size+self.offsetx+movement+widthright, -self.size+self.offsety+movement2,    -self.size+self.offsetz+off),
 
-            (self.size+self.offsetx,     self.size+self.offsety,  -self.size+self.offsetz+off),
-            (self.size+self.offsetx,     self.size+self.offsety,  self.size+self.offsetz+off),
-            (-self.size+self.offsetx,    self.size+self.offsety,  self.size+self.offsetz+off),
-            (-self.size+self.offsetx,    self.size+self.offsety,  -self.size+self.offsetz+off))
+            (self.size+self.offsetx+movement+widthleft,     self.size+self.offsety+movement2,  -self.size+self.offsetz+off),
+            (self.size+self.offsetx+movement+widthleft,     self.size+self.offsety+movement2,  self.size+self.offsetz+off),
+            (-self.size+self.offsetx+movement+widthright,    self.size+self.offsety+movement2,  self.size+self.offsetz+off),
+            (-self.size+self.offsetx+movement+widthright,    self.size+self.offsety+movement2,  -self.size+self.offsetz+off))
         
         return vertices
 
@@ -66,7 +64,7 @@ class Door:
         verticles =self.verticlesHause()
         glBegin(GL_QUADS)
         for i, vertex in enumerate(self.surface):
-            glColor3fv((0.5, 0.35, 0.05)) #color brown rgb where max value is 1 (0.5, 0.35, 0.05)
+            glColor3fv((0, 0, 0.5)) 
             glVertex3fv(verticles[vertex])
         glEnd()
         return 

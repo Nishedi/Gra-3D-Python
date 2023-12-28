@@ -46,15 +46,14 @@ def main():
     glEnable(GL_DEPTH_TEST)
     side = 0
     distanceDeep = -45
-    distanceDeep=-10
+    #distanceDeep=-10
     distanceWidth = 2
+    incrementer = 0.1
    
-    cube1 = Cube(1,distanceWidth,0,distanceDeep, 0)
-    roof1 = Roof(distanceWidth,0,distanceDeep)
-    hause1 = Hause(cube1, roof1, Door(0.2,distanceWidth,0,distanceDeep-1, 0))
-    cube2 = Cube(1,-distanceWidth,0,distanceDeep, 2)
-    roof2 = Roof(-distanceWidth,0,distanceDeep)
-    hause2 = Hause(cube2, roof2, Door(1/5,-distanceWidth,0,distanceDeep-10, 0))
+
+    hause1 = Hause(distanceWidth,distanceDeep)
+    hause2 = Hause(-distanceWidth,distanceDeep)
+
    
     cubeMini = Cube(0.1, side, -0.5, 1, 1)
     
@@ -100,15 +99,19 @@ def main():
         cubeMini.show_cube()
         
         for hause in objList:
-            hause.move(distanceDeep)
+            hause.move(distanceDeep, incrementer)
             hause.showHouse()
         
         light()
         collision = chechCollision(objList, cubeMini)
         if collision == False:
-            distanceDeep += 0.01
+            distanceDeep += incrementer
+            incrementer += 0.01
+
         if distanceDeep >= 6:
             distanceDeep = -45
+            for hause in objList:
+                hause.cube.offsetz = -45
         pygame.display.flip()
         pygame.time.wait(timetowait)
 

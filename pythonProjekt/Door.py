@@ -26,24 +26,11 @@ class Door:
     offsety=0
     offsetz=0
 
-    def __init__(self, size, offsetx, offsety, offsetz, color):
-        self.size=size
+    def __init__(self, offsetx, offsety, offsetz):
+        self.size=0.2
         self.offsetx=offsetx
         self.offsety=offsety
         self.offsetz=offsetz
-        self.colors=self.setColor(color)
-
-    def setColor(self, mode):
-        if mode == 0:
-            return (1, 0.8, 0.75)
-        if mode == 1:
-            return (0, 1, 0)
-        if mode == 2:
-            return (1, 0.91, 0.75)
-        if mode == 3:
-            return (1, 0, 0)
-        if mode == 4:
-            return (1, 1, 0)
 
     def verticlesHause(self):
         off = 0.81
