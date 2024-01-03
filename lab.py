@@ -5,7 +5,8 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from Cube import Cube
 from Hause import Hause
-from Tree import Tree
+from Wood import Wood
+from Rock import Rock
 import random
 
 def generateRandomPossition(lowerBound, upperBound):
@@ -79,17 +80,17 @@ def main():
     distanceDeep = -45
     distanceWidth = generateRandomPossition(4,5)
     incrementer = 0.001
-    incrementer = 1
    
 
    
-    cubeMini = Cube(0.1, side, -0.5, 1, 1)
+    cubeMini = Cube(0.1, side, -0.6,1, 1)
     
     objList = []
     objList.append(Hause(distanceWidth,distanceDeep))
     objList.append(Hause(-distanceWidth,distanceDeep))
     timetowait = 10
     glRotatef(15, 3, 0, 0)
+    wood = Rock(0.1,0,-0.7,0)
     
     while True:
         for event in pygame.event.get():
@@ -129,16 +130,20 @@ def main():
         draw_grass(zebra)
         cubeMini.moveWidth(side)
         cubeMini.show_cube()
+        wood.moveDeep(distanceDeep+46)
         for hause in objList:
             hause.move(distanceDeep)
             hause.showHouse()
-        
+        wood.show_cube()
         light()
         collision = chechCollision(objList, cubeMini)
+        wood.checkCollision
         if collision == False:
             distanceDeep += incrementer
             zebra += incrementer
-            incrementer += 0.001
+            #incrementer += 0.001
+
+            
         if distanceDeep >= 6:
             distanceDeep = -45
             points+=10*(6-distanceWidth)

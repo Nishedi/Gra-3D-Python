@@ -6,18 +6,21 @@ from Cube import Cube
 from Roof import Roof
 from Door import Door
 from Window import Window
+import random
 class Hause:
     windowList= []
     cube = Cube(0,0,0,0,0)
     def __init__(self, distanceWidth, distanceDeep):
-        self.cube = Cube(1,distanceWidth,0,distanceDeep, 0)
+        self.cube = Cube(1,distanceWidth,0,distanceDeep, self.generateRandomPossition(0, 4))
         self.roof = Roof(distanceWidth,0,distanceDeep)
         self.door = Door(distanceWidth,0,distanceDeep-1)
         self.windowList.append(Window(distanceWidth,0,distanceDeep-1, 0.65, 0, 0,0))
         self.windowList.append(Window(distanceWidth,0,distanceDeep-1, -0.65, 0,0,0))
         self.windowList.append(Window(distanceWidth,0,distanceDeep-1, 0.65, 1, 0,-0.3))
         self.windowList.append(Window(distanceWidth,0,distanceDeep-1, -0.65, 1, 0.3,0))
-        
+    
+    def generateRandomPossition(self,lowerBound, upperBound):
+        return random.randint(lowerBound, upperBound)
 
     def move(self, deep):
         self.cube.moveDeep(deep)
