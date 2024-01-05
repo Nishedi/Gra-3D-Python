@@ -62,6 +62,8 @@ class Roof:
 
     def moveDeep(self, deep):
         self.offsetz=deep 
+    def moveTest(self, incrementer):
+        self.offsetz+=incrementer
 
     def moveWidth(self, width):
         self.offsetx=width

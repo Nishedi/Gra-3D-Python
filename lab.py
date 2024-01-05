@@ -25,9 +25,11 @@ def light():
     glLightfv(GL_LIGHT0, GL_SPECULAR, (0.0, 1.0, 0.0, 1.0))
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE )
 
-def chechCollision(list, cubeMini):
+
+def chechCollision2(list, cubeMini):
     for item in list:
-        if cubeMini.checkCollision(item.cube.returnFront())==True:
+        if cubeMini.checkCollision(item.returnFront())==True:
+            print("kolizja")
             return True
     return False
 
@@ -80,17 +82,22 @@ def main():
     distanceDeep = -45
     distanceWidth = generateRandomPossition(4,5)
     incrementer = 0.001
+    incrementer = 0.01
    
 
    
     cubeMini = Cube(0.1, side, -0.6,1, 1)
     
     objList = []
-    objList.append(Hause(distanceWidth,distanceDeep))
-    objList.append(Hause(-distanceWidth,distanceDeep))
+    # objList.append(Hause(distanceWidth,distanceDeep))
+    # objList.append(Hause(-distanceWidth,distanceDeep))
+
+    blockades = []
+    blockades.append(Rock(0.1,0,-0.7))
     timetowait = 10
     glRotatef(15, 3, 0, 0)
-    wood = Rock(0.1,0,-0.7,0)
+    movement = True
+    probability = 100
     
     while True:
         for event in pygame.event.get():
@@ -106,9 +113,11 @@ def main():
                 if event.key == pygame.K_DOWN:
                     distanceDeep-=1
                     zebra += -1
+                    incrementer = 0.01
                 if event.key == pygame.K_UP:
                     distanceDeep+=1
                     zebra += 1
+                    incrementer = 1
 
                 if event.key == pygame.K_d:
                     glRotatef(5, 0, 1, 0) 
@@ -130,18 +139,55 @@ def main():
         draw_grass(zebra)
         cubeMini.moveWidth(side)
         cubeMini.show_cube()
-        wood.moveDeep(distanceDeep+46)
         for hause in objList:
-            hause.move(distanceDeep)
+            if movement == True:
+                hause.move(distanceDeep, incrementer)
             hause.showHouse()
-        wood.show_cube()
+        for blockade in blockades:
+            if movement == True:
+                blockade.moveTest(incrementer)
+            blockade.show_cube()
+            
+
         light()
-        collision = chechCollision(objList, cubeMini)
-        wood.checkCollision
-        if collision == False:
+        collision2 = chechCollision2(blockades, cubeMini)
+        if  collision2 == False:
+            movement = True
             distanceDeep += incrementer
             zebra += incrementer
             #incrementer += 0.001
+        else:
+            while True:
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_c:
+                            pygame.quit()
+                            quit() 
+
+        for blockade in blockades:
+            if blockade.offsetz>=6:
+                blockades.remove(blockade)
+                blockades.append(Rock(0.1,0,-0.7))
+                points+=10
+
+        for hause in objList:
+            if hause.offsetz>=6:
+                hause.crashWindow()
+                objList.remove(hause)
+                distanceWidth = generateRandomPossition(4,5)
+                LorR = generateRandomPossition(0,2)
+                if LorR == 1:
+                    objList.append(Hause(distanceWidth,distanceDeep))
+                if LorR == 0:
+                    objList.append(Hause(-distanceWidth,distanceDeep))
+
+    
+        if generateRandomPossition(0,probability)==1:
+            LorR = generateRandomPossition(0,2)
+            if LorR == 1:
+                objList.append(Hause(distanceWidth,distanceDeep))
+            if LorR == 0:
+                objList.append(Hause(-distanceWidth,distanceDeep))
 
             
         if distanceDeep >= 6:
@@ -154,6 +200,8 @@ def main():
             objList.clear()
             objList.append(Hause(distanceWidth,distanceDeep))
             objList.append(Hause(-distanceWidth,distanceDeep))
+            # blockades.clear()
+            # blockades.append(Rock(0.1,0,-0.7))
         pygame.display.flip()
         pygame.time.wait(timetowait)
 

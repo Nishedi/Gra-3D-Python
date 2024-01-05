@@ -44,11 +44,11 @@ class Rock:
 
     
     
-    def __init__(self, size, offsetx, offsety, offsetz):
+    def __init__(self, size, offsetx, offsety):
         self.size=size
         self.offsetx=offsetx
         self.offsety=offsety
-        self.offsetz=offsetz
+        self.offsetz=-45
         self.colors=(0.5, 0.5, 0.5) 
         self.right=self.generateRandomPossition(0,10)/10
         self.left=self.generateRandomPossition(0,10)/10
@@ -100,6 +100,9 @@ class Rock:
     def returnFront(self):
         verticles =self.verticlesHause()
         return (verticles[1][2], verticles[2][0], verticles[0][0])
+    
+    def moveTest(self, incrementer):
+        self.offsetz+=incrementer
 
     def moveDeep(self, deep):
         self.offsetz=deep  

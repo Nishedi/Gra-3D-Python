@@ -10,24 +10,26 @@ import random
 class Hause:
     windowList= []
     cube = Cube(0,0,0,0,0)
+    offsetz = -45
     def __init__(self, distanceWidth, distanceDeep):
-        self.cube = Cube(1,distanceWidth,0,distanceDeep, self.generateRandomPossition(0, 4))
-        self.roof = Roof(distanceWidth,0,distanceDeep)
-        self.door = Door(distanceWidth,0,distanceDeep-1)
-        self.windowList.append(Window(distanceWidth,0,distanceDeep-1, 0.65, 0, 0,0))
-        self.windowList.append(Window(distanceWidth,0,distanceDeep-1, -0.65, 0,0,0))
-        self.windowList.append(Window(distanceWidth,0,distanceDeep-1, 0.65, 1, 0,-0.3))
-        self.windowList.append(Window(distanceWidth,0,distanceDeep-1, -0.65, 1, 0.3,0))
+        self.cube = Cube(1,distanceWidth,0,self.offsetz, self.generateRandomPossition(0, 4))
+        self.roof = Roof(distanceWidth,0,self.offsetz)
+        self.door = Door(distanceWidth,0,self.offsetz)
+        self.windowList.append(Window(distanceWidth,0,self.offsetz, 0.65, 0, 0,0))
+        self.windowList.append(Window(distanceWidth,0,self.offsetz, -0.65, 0,0,0))
+        self.windowList.append(Window(distanceWidth,0,self.offsetz, 0.65, 1, 0,-0.3))
+        self.windowList.append(Window(distanceWidth,0,self.offsetz, -0.65, 1, 0.3,0))
     
     def generateRandomPossition(self,lowerBound, upperBound):
         return random.randint(lowerBound, upperBound)
 
-    def move(self, deep):
-        self.cube.moveDeep(deep)
-        self.roof.moveDeep(deep)
-        self.door.moveDeep(deep)
+    def move(self, deep, incrementer):
+        self.offsetz += incrementer
+        self.cube.moveDeep(self.offsetz)
+        self.roof.moveDeep(self.offsetz)
+        self.door.moveDeep(self.offsetz)
         for window in self.windowList:
-            window.moveDeep(deep)
+            window.moveDeep(self.offsetz)
     
     def crashWindow(self):
         self.windowList.clear()
