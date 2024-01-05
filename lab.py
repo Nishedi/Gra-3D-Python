@@ -82,23 +82,32 @@ def main():
     distanceDeep = -45
     distanceWidth = generateRandomPossition(4,5)
     incrementer = 0.001
-    incrementer = 0.01
+    incrementer = 0.05
    
 
    
     cubeMini = Cube(0.1, side, -0.6,1, 1)
     
     objList = []
-    # objList.append(Hause(distanceWidth,distanceDeep))
-    # objList.append(Hause(-distanceWidth,distanceDeep))
+    objList.append(Hause(distanceWidth,distanceDeep))
+    objList.append(Hause(-distanceWidth,distanceDeep))
 
     blockades = []
-    blockades.append(Rock(0.1,0,-0.7))
+    # blockades.append(Rock(0.1,0,-0.7))
+    # blockades.append(Wood(0.5,2,-0.3))
     timetowait = 10
     glRotatef(15, 3, 0, 0)
     movement = True
-    probability = 100
-    
+    probability = 500000
+    blockProbability = 200
+    start = True
+
+    print("Nacisnij spacje aby rozpoczac gre!")
+    while start:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    start= False
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -113,11 +122,11 @@ def main():
                 if event.key == pygame.K_DOWN:
                     distanceDeep-=1
                     zebra += -1
-                    incrementer = 0.01
+                    incrementer -= 0.01
                 if event.key == pygame.K_UP:
                     distanceDeep+=1
                     zebra += 1
-                    incrementer = 1
+                    incrementer += 0.01
 
                 if event.key == pygame.K_d:
                     glRotatef(5, 0, 1, 0) 
@@ -157,51 +166,49 @@ def main():
             zebra += incrementer
             #incrementer += 0.001
         else:
+            print("Kolizja! Koniec gry!")
+            print("Twoj wynik: ", points)
+            print("Nacisnij spacje aby zakonczyc gre!")
             while True:
                 for event in pygame.event.get():
                     if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_c:
+                        if event.key == pygame.K_SPACE:
                             pygame.quit()
                             quit() 
 
         for blockade in blockades:
             if blockade.offsetz>=6:
+                if(blockProbability>10):
+                    blockProbability-=10
                 blockades.remove(blockade)
-                blockades.append(Rock(0.1,0,-0.7))
                 points+=10
+                incrementer += 0.02
 
-        for hause in objList:
-            if hause.offsetz>=6:
-                hause.crashWindow()
-                objList.remove(hause)
-                distanceWidth = generateRandomPossition(4,5)
-                LorR = generateRandomPossition(0,2)
-                if LorR == 1:
-                    objList.append(Hause(distanceWidth,distanceDeep))
-                if LorR == 0:
-                    objList.append(Hause(-distanceWidth,distanceDeep))
 
-    
-        if generateRandomPossition(0,probability)==1:
-            LorR = generateRandomPossition(0,2)
-            if LorR == 1:
-                objList.append(Hause(distanceWidth,distanceDeep))
-            if LorR == 0:
-                objList.append(Hause(-distanceWidth,distanceDeep))
-
-            
         if distanceDeep >= 6:
-            distanceDeep = -45
-            points+=10*(6-distanceWidth)
-            print(points)
-            distanceWidth = generateRandomPossition(4,5)
             for hause in objList:
                 hause.crashWindow()
             objList.clear()
+            distanceDeep = -55
             objList.append(Hause(distanceWidth,distanceDeep))
             objList.append(Hause(-distanceWidth,distanceDeep))
-            # blockades.clear()
-            # blockades.append(Rock(0.1,0,-0.7))
+    
+        if generateRandomPossition(0,probability)==1:
+            objList.append(Hause(distanceWidth,distanceDeep))
+            objList.append(Hause(-distanceWidth,distanceDeep))
+
+        if generateRandomPossition(0,blockProbability)==1:
+            WoodOrRock = generateRandomPossition(0,2)
+            possition = generateRandomPossition(0,10)/5
+            sign = generateRandomPossition(0,2)
+            if sign == 0:
+                possition = -possition
+
+            if WoodOrRock == 1:
+                blockades.append(Rock(0.1,possition,-0.7))
+            if WoodOrRock == 0:
+                blockades.append(Wood(0.5,possition,-0.3))
+
         pygame.display.flip()
         pygame.time.wait(timetowait)
 

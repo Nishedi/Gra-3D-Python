@@ -43,14 +43,14 @@ class Wood:
 
     
     
-    def __init__(self, size, offsetx, offsety, offsetz):
+    def __init__(self, size, offsetx, offsety):
         self.size=size
         self.offsetx=offsetx
         self.offsety=offsety
-        self.offsetz=offsetz
         self.colors=(0.5, 0.35, 0.05)
         self.right=self.generateRandomPossition(0,10)/10
         self.left=self.generateRandomPossition(0,10)/10
+        self.offsetz=-45
 
     def generateRandomPossition(self,lowerBound, upperBound):
         return random.randint(lowerBound, upperBound)
@@ -100,7 +100,10 @@ class Wood:
         return (verticles[1][2], verticles[2][0], verticles[0][0])
 
     def moveDeep(self, deep):
-        self.offsetz=deep  
+        self.offsetz=deep
+
+    def moveTest(self, incrementer):
+        self.offsetz+=incrementer  
         
 
     def moveWidth(self, width):

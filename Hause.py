@@ -11,7 +11,13 @@ class Hause:
     windowList= []
     cube = Cube(0,0,0,0,0)
     offsetz = -45
+    sign=1
     def __init__(self, distanceWidth, distanceDeep):
+        self.offsetz = distanceDeep
+        if distanceWidth < 0 :
+            self.sign=-1
+        if distanceWidth > 0 :
+            self.sign=1
         self.cube = Cube(1,distanceWidth,0,self.offsetz, self.generateRandomPossition(0, 4))
         self.roof = Roof(distanceWidth,0,self.offsetz)
         self.door = Door(distanceWidth,0,self.offsetz)
