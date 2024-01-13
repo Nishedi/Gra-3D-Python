@@ -2,7 +2,6 @@ from pygame.locals import *
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
-from Cords import Cords
 class Cube:
     colors = (155, 143, 129)
 
@@ -114,7 +113,7 @@ class Cube:
 
     def checkCollision(self, zone):
         verticles =self.verticlesHause()
-        if zone[0] >= 0.9:
+        if zone[0] >= 0.9 and zone[0] <= 1.4:
             if verticles[2][0]<=zone[2]:
                 if verticles[2][0]>=zone[1]:
                     return True

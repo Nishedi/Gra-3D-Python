@@ -2,7 +2,6 @@ from pygame.locals import *
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
-from Cords import Cords
 class Door:
     colors = (155, 143, 129)
 

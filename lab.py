@@ -1,17 +1,25 @@
 import pygame
 from pygame.locals import *
-from math import cos, sin, radians
 from OpenGL.GL import *
 from OpenGL.GLU import *
+from OpenGL.GLUT import *
 from Cube import Cube
 from Hause import Hause
 from Wood import Wood
 from Rock import Rock
 import random
+from OpenGL.GLUT import GLUT_BITMAP_HELVETICA_18, glutBitmapCharacter
+
 
 def generateRandomPossition(lowerBound, upperBound):
     return random.randint(lowerBound, upperBound)
 
+def renderString(x, y, string):
+    glColor3f(1.0, 1.0, 1.0)
+    glRasterPos2f(x, y)
+    for c in string:
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(c))
+        
 def light():
     glLight(GL_LIGHT0, GL_POSITION,  (5, 5, 5, 0)) # źródło światła left, top, front
 
@@ -35,8 +43,7 @@ def chechCollision2(list, cubeMini):
 
 def draw_grass(offset):
     glBegin(GL_QUADS)
-
-    glColor3f(0.522, 0.984, 0.1)  # Kolor trawy
+    glColor3f(0.522*0.8, 0.984*0.8, 0.1*0.8)  # Kolor trawy
     glVertex3f(-100, -1, -50)
     glVertex3f(100, -1, -50)
     glVertex3f(100, -1, 10)
@@ -64,6 +71,7 @@ def draw_grass(offset):
 def main():
     points = 0
     zebra = 0
+    glutInit()
     pygame.init()
     display = (800,600)
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
@@ -93,22 +101,43 @@ def main():
     objList.append(Hause(-distanceWidth,distanceDeep))
 
     blockades = []
-    # blockades.append(Rock(0.1,0,-0.7))
-    # blockades.append(Wood(0.5,2,-0.3))
     timetowait = 10
     glRotatef(15, 3, 0, 0)
     movement = True
     probability = 500000
     blockProbability = 200
     start = True
-
-    print("Nacisnij spacje aby rozpoczac gre!")
-    while start:
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    start= False
+    stop = False   
+        
     while True:
+        if start:
+            glClearColor(0, 0.6, 1, 1.0)
+            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+            renderString(-1.5,1,"Witaj w grze! Twoim zadaniem jest unikanie przeszkod!")
+            renderString(-1,0.5,"Nacisnij spacje aby rozpoczac gre!")
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        start= False
+            pygame.display.flip()
+            pygame.time.wait(timetowait)
+            continue
+        if stop:
+            glClearColor(0, 0.6, 1, 1.0)
+            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+            renderString(-0.4,1,"Koniec gry!")
+            renderString(-0.49,0.5,"Twoj wynik: "+str(points))
+            renderString(-1.05,0,"Nacisnij spacje aby zakonczyc gre!")
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        return
+            pygame.display.flip()
+            pygame.time.wait(timetowait)
+            continue
+        
+        glClearColor(0, 0.6, 1, 1.0)
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -116,9 +145,11 @@ def main():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
-                    side += 0.5
+                    if side < 2:
+                        side += 0.5
                 if event.key == pygame.K_LEFT:
-                    side -= 0.5
+                    if side > -2:
+                        side -= 0.5
                 if event.key == pygame.K_DOWN:
                     distanceDeep-=1
                     zebra += -1
@@ -142,9 +173,7 @@ def main():
                     glRotatef(-5, 0, 0, 1) 
                 if event.key == pygame.K_c: # wylaczenie aplikacje klawiszem C
                     return
-    
-        glClearColor(0, 0.6, 1, 1.0)
-        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+        renderString(-2.5,1.8,"Twoj wynik: "+str(points))
         draw_grass(zebra)
         cubeMini.moveWidth(side)
         cubeMini.show_cube()
@@ -157,7 +186,7 @@ def main():
                 blockade.moveTest(incrementer)
             blockade.show_cube()
             
-
+        
         light()
         collision2 = chechCollision2(blockades, cubeMini)
         if  collision2 == False:
@@ -166,20 +195,12 @@ def main():
             zebra += incrementer
             #incrementer += 0.001
         else:
-            print("Kolizja! Koniec gry!")
-            print("Twoj wynik: ", points)
-            print("Nacisnij spacje aby zakonczyc gre!")
-            while True:
-                for event in pygame.event.get():
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_SPACE:
-                            pygame.quit()
-                            quit() 
+            stop = True
 
         for blockade in blockades:
             if blockade.offsetz>=6:
                 if(blockProbability>10):
-                    blockProbability-=10
+                    blockProbability-=5
                 blockades.remove(blockade)
                 points+=10
                 incrementer += 0.02
