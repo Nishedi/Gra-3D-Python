@@ -40,14 +40,9 @@ class Roof:
         (2,4,5)
     )
 
-    colorsForTriangle = (
-        (1,0,0),
-        (1,0,0),
-        (1,0,0),
-        (1,0,0)
-    )
     def show_triangle(self):
         glBegin(GL_LINES)
+        glColor3fv((1,0,0))
         for edge in self.edgesRoof():
             for vertex in edge:
                 glVertex3fv(self.verticlesRoof(self.offsetx, self.offsety, self.offsetz)[vertex])
@@ -55,8 +50,9 @@ class Roof:
         
         glBegin(GL_TRIANGLES)
         for surface in self.surfacesForTriangle:
+            color = (1,0,0)
+            glColor3fv(color)
             for i, vertex in enumerate(surface):
-                glColor3fv(self.colorsForTriangle[i])
                 glVertex3fv(self.verticlesRoof(self.offsetx, self.offsety, self.offsetz)[vertex])
         glEnd()
 

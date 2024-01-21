@@ -35,6 +35,7 @@ class Hause:
         self.roof.moveDeep(self.offsetz)
         self.door.moveDeep(self.offsetz)
         for window in self.windowList:
+            window.deep=5
             window.moveDeep(self.offsetz)
     
     def crashWindow(self):

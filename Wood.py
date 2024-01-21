@@ -40,6 +40,7 @@ class Wood:
     offsetz=0
     right=0
     yleft=0
+    deep = 5
 
     
     
@@ -74,6 +75,7 @@ class Wood:
     def show_cube(self):
         verticles =self.verticlesHause()
         glBegin(GL_LINES)
+        glColor3fv((0.5*1.1, 0.35*1.1, 0.05*1.1))
         for edge in self.edges:
             for vertex in edge:
                 glVertex3fv(verticles[vertex])
@@ -82,11 +84,10 @@ class Wood:
         glBegin(GL_QUADS)
         k = 0
         for surface in self.surfaces:
-            k+=1
-            if k == 7:
-                glColor3fv((0.5, 0.35, 0.05))
-            else:
-                glColor3fv(self.colors)
+            wsp = 20/(self.deep)
+            colorx = self.colors
+            color2 = (colorx[0] * wsp, colorx[1] * wsp, colorx[2] * wsp)
+            glColor3fv(color2)
             
             for i, vertex in enumerate(surface):
                 glVertex3fv(verticles[vertex])

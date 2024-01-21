@@ -37,7 +37,7 @@ class Cube:
     offsetx=0
     offsety=0
     offsetz=0
-
+    deep = 5
     def __init__(self, size, offsetx, offsety, offsetz, color):
         self.size=size
         self.offsetx=offsetx
@@ -74,7 +74,8 @@ class Cube:
 
 
     def show_cube(self):
-        verticles =self.verticlesHause()
+        verticles = self.verticlesHause()
+
         glBegin(GL_LINES)
         for edge in self.edges:
             for vertex in edge:
@@ -82,21 +83,16 @@ class Cube:
         glEnd()
 
         glBegin(GL_QUADS)
-        k = 0
         for surface in self.surfaces:
-            k+=1
-            if k == 7:
-                glColor3fv((0.5, 0.35, 0.05))
-            else:
-                glColor3fv(self.colors)
-            
+            wsp = 20/(self.deep)
+            color2 = (self.colors[0] * wsp, self.colors[1] * wsp, self.colors[2] * wsp)
+            glColor3fv(color2)
             for i, vertex in enumerate(surface):
                 glVertex3fv(verticles[vertex])
-        
-        
+
         glEnd()
-        return 
-    
+        return
+
     def returnFront(self):
         verticles =self.verticlesHause()
         return (verticles[1][2], verticles[2][0], verticles[0][0])
@@ -107,7 +103,6 @@ class Cube:
     def moveTest(self, incrementer):
         self.offsetz+=incrementer
         
-
     def moveWidth(self, width):
         self.offsetx=width
 

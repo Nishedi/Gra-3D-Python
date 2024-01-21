@@ -6,13 +6,6 @@ class Door:
     colors = (155, 143, 129)
 
     surface = (1, 5, 6, 2) # przod domu)
-        #(0, 1, 2, 3),
-        #(0, 1, 5, 4), # prawa strona domu
-        #(0, 4, 7, 3), # nieistotna
-        #(4, 5, 6, 7), # gora
-        #(3, 2, 6, 7), # lewa strona domu
-        
-    
 
     edges = (
         (2, 1),
@@ -24,6 +17,7 @@ class Door:
     offsetx=0
     offsety=0
     offsetz=0
+    deep = 5
 
     def __init__(self, offsetx, offsety, offsetz):
         self.size=0.2
@@ -52,7 +46,10 @@ class Door:
         verticles =self.verticlesHause()
         glBegin(GL_QUADS)
         for i, vertex in enumerate(self.surface):
-            glColor3fv((0.5, 0.35, 0.05)) #color brown rgb where max value is 1 (0.5, 0.35, 0.05)
+            wsp = 20/(self.deep)
+            colorx = (0.5, 0.35, 0.05)
+            color2 = (colorx[0] * wsp, colorx[1] * wsp, colorx[2] * wsp)
+            glColor3fv(color2)
             glVertex3fv(verticles[vertex])
         glEnd()
         return 

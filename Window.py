@@ -5,14 +5,7 @@ from OpenGL.GLU import *
 class Window:
     colors = (155, 143, 129)
 
-    surface = (1, 5, 6, 2) # przod domu)
-        #(0, 1, 2, 3),
-        #(0, 1, 5, 4), # prawa strona domu
-        #(0, 4, 7, 3), # nieistotna
-        #(4, 5, 6, 7), # gora
-        #(3, 2, 6, 7), # lewa strona domu
-        
-    
+    surface = (1, 5, 6, 2) # przod domu)  
 
     edges = (
         (2, 1),
@@ -26,6 +19,7 @@ class Window:
     offsetz=0
     movementx = 0
     movementy = 0
+    deep = 55
 
     def __init__(self, offsetx, offsety, offsetz, movementx, movementy, widthleft, widthright):
         self.size=0.2
@@ -62,8 +56,11 @@ class Window:
     def show_cube(self):
         verticles =self.verticlesHause()
         glBegin(GL_QUADS)
-        for i, vertex in enumerate(self.surface):
-            glColor3fv((0, 0, 0.5)) 
+        for i, vertex in enumerate(self.surface): 
+            wsp = 20/(self.deep)
+            colorx = (0, 0, 0.5)
+            color2 = (colorx[0] * wsp, colorx[1] * wsp, colorx[2] * wsp)
+            glColor3fv(color2)
             glVertex3fv(verticles[vertex])
         glEnd()
         return 
